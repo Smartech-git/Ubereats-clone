@@ -1,11 +1,40 @@
-import { View, Text, SafeAreaView, StatusBar, ScrollView} from 'react-native'
-import React from 'react'
-import Header from '../Components/Header'
-import SearchBar from '../Components/SearchBar'
-import Categories from '../Components/Categories'
-import ResturantItem from '../Components/ResturantItem'
+import { View, Text, SafeAreaView, StatusBar, ScrollView} from 'react-native';
+import React ,{useEffect, useState} from 'react';
+import Header from '../Components/Header';
+import SearchBar from '../Components/SearchBar';
+import Categories from '../Components/Categories';
+import ResturantItem, {restaurantsArray} from '../Components/ResturantItem';
+import axios from 'axios';
 
-export default function Home() {
+const YELP_API_KEY = "tveSaaH4WfbNVgYLLK2AXLVqN6v7hd91ctfmHPM5b1UkS4VLzWajJqZCSqkwO4HA7N4dClwVz76yyC-Z10atJRgHXNwt3SSjzq1TDdnMzbCW_YLlADtmDO94DTatYnYx";
+
+export default function Home(){
+  const [restaurantData, setRestuarantData] = useState(restaurantsArray)
+
+  function getResturants() {
+    const config = {
+      headers: {
+        Authorization:
+          `Bearer ${YELP_API_KEY}`,
+      },
+      params: {
+        term: "restaurants",
+        location: "new york",
+        limit: 5,
+      },
+    };
+
+    axios
+    .get("https://api.yelp.com/v3/businesses/search", config)
+    .then((response) => {
+      console.log(response.data); //These are the results sent back from the API!
+    });
+  }
+
+  useEffect( ()=>{
+    // getResturants()
+  }, [])
+
   return (
     <SafeAreaView 
       style={{
@@ -20,9 +49,9 @@ export default function Home() {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Categories/>
-        <ResturantItem />
-        <ResturantItem />
+        <ResturantItem restaurantsData = {restaurantData} />
       </ScrollView>
+      <StatusBar/>
     </SafeAreaView>
   )
 }
