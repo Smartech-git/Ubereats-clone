@@ -19,20 +19,20 @@ export default function Home(){
       },
       params: {
         term: "restaurants",
-        location: "new york",
-        limit: 5,
+        location: "Hollywood",
+        limit: 20,
       },
     };
 
     axios
     .get("https://api.yelp.com/v3/businesses/search", config)
     .then((response) => {
-      console.log(response.data); //These are the results sent back from the API!
+      setRestuarantData(response.data.businesses); //These are the results sent back from the API!
     });
   }
 
   useEffect( ()=>{
-    // getResturants()
+    //getResturants()
   }, [])
 
   return (
