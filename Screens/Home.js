@@ -11,7 +11,7 @@ const YELP_API_KEY = "tveSaaH4WfbNVgYLLK2AXLVqN6v7hd91ctfmHPM5b1UkS4VLzWajJqZCSq
 export default function Home(){
   const [restaurantData, setRestuarantData] = useState(restaurantsArray)
 
-  function getResturants() {
+  function getResturants(arg) {
     const config = {
       headers: {
         Authorization:
@@ -19,7 +19,7 @@ export default function Home(){
       },
       params: {
         term: "restaurants",
-        location: "Hollywood",
+        location: arg,
         limit: 20,
       },
     };
@@ -45,7 +45,7 @@ export default function Home(){
     >
       <View style={{backgroundColor: "white", padding: 15}}>
         <Header/>
-        <SearchBar/>
+        <SearchBar getResturants ={getResturants}/>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Categories/>

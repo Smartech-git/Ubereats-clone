@@ -1,10 +1,21 @@
-import { View, Text, TextInput } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity } from 'react-native'
+import React, {useState} from 'react'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function SearchBar() {
+export default function SearchBar(props) {
+  const [text, onChange] = useState();
+
+  const  handleKeyPress = ({ nativeEvent: { text, eventCount, target }}) => {
+    props.getResturants(text)
+    onChange("")
+  };
+  const Search = () => {
+    props.getResturants(text);
+    onChange("")
+  }
+
   return (
     <View style={{marginTop: 14, flexDirection: "row"}}>
       <GooglePlacesAutocomplete
@@ -12,7 +23,11 @@ export default function SearchBar() {
         textInputProps = {{
           selectionColor: 'rgba(0, 0, 0, 0.55)',
           spellCheck: false,
-          autoCorrect: false
+          autoCorrect: false,
+          onChangeText: (e) => onChange(e),
+          value: text,
+          returnKeyType: "search",
+          onSubmitEditing: handleKeyPress
         }}
         styles={{
             textInput: {
@@ -44,19 +59,20 @@ export default function SearchBar() {
             </View>
         )}
         renderRightButton = {() => (
-          <View style={{
-            flexDirection: 'row',
-            marginRight: 8,
-            backgroundColor: "white",
-            padding: 8,
-            borderRadius: 38,
-            alignItems: "center",
-
-
-          }}>
-            <AntDesign name="clockcircle" size={13} style={{marginRight: 7}} color="black" />
-            <Text>Search</Text>
-          </View>
+          <TouchableOpacity  onPress={Search}>
+            <View style = {{
+              flexDirection: 'row',
+              marginRight: 8,
+              backgroundColor: "white",
+              padding: 8,
+              borderRadius: 38,
+              alignItems: "center",
+              }}
+            >
+              <AntDesign name="clockcircle" size={13} style={{marginRight: 7}} color="black" />
+              <Text>Search</Text>
+            </View>
+          </TouchableOpacity>
         )}
       />
     </View>
